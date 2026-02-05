@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ecommerce</title>
+</head>
+<body>
+
+<script>
+// 1- Criar um ficheiro html com uma tag script;
+
+// 2- Criar uma class chamada Ecommerce;
+class Ecommerce {
+    constructor() {
+        this.products = [];
+        this.cart = [];
+    }
+
+// 3.1 - Criar os seguintes métodos para a class:
+// addProduct: aceita um produto e o adicione à lista de produtos;
+
+addProduct(product) {
+        this.products.push(product);
+    }
+
+    // 3.2 - setProductPrice: aceita 2 paramentros: productId e price; Deve actualizar o produto com o preço novo (price)
+setProductPrice(productId, price) {
+    const product = this.products.find(p => p.id === productId);
+    if (product) product.price = price;
+}
+
+// 3.3 - getAllProducts: devolve a lista de todos os produtos;
+getAllProducts() {
+    return this.products;
+}
+
+// 3.4 - getAllProductsNames: devolve uma string com todos os nomes dos produtos, separados por ponto e virgula 
+getAllProductNames() {
+    return this.products.map(p => p.name).join("; ");
+}
+
+// 3.5 - getProductById: aceita um id de produto e devolve esse produto;
+getProductById(productId) {
+    return this.products.find(p => p.id === productId);
+}
+
+// 3.6 - getProductsByPrice: roductsByPrice: aceita 2 parametros: initialPrice e finalPrice;  Devolve os produtos que sejam iguais ou superiores a initialPrice e menores ou iguais a finalPrice;
+  getProductsByPrice(minPrice, maxPrice) {
+    return this.products.filter(p => p.price >= minPrice && p.price <= maxPrice);
+  }
+
+
+  // 3.7 - addProductToCart: aceita um produto e adiciona esse produto ao carrinho de compras;
+  addProductToCart(product) {
+    this.cart.push(product);
+  }
+
+  // 3.8 - getCart: devolve a lista de produtos do carrinho de compras;
+  getCart(){
+    return this.cart;
+  }
+
+// 3.9 - getCartTotalPrice: devolve a soma de todos os produtos do carrinho;
+getCartTotalPrice() {
+    return this.cart.reduce((total, p) => total + p.price, 0);
+}
+
+}
+
+// 4 - Um produto é composto pelos campos: name, price, id;
+// 5 - O carrinho de compras é um array de produtos;
+
+const store = new Ecommerce();
+
+const product1 = { id: 1, name: "T-shirt", price: 20};
+const product2 = { id: 2, name: "Jeans", price: 40 };
+const product3 = { id: 3, name: "Sneakers", price: 60};
+
+store.addProduct(product1);
+store.addProduct(product2);
+store.addProduct(product3);
+
+store.addProductToCart(product1);
+store.addProductToCart(product3);
+
+console.log("All products:", store.getAllProducts());
+console.log("Product names:", store.getAllProductNames());
+console.log("Cart:", store.getCart());
+console.log("Total price:", store.getCartTotalPrice());
+
+
+
+</script>
+</body>
+</html>
