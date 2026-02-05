@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ecommerce Homepage</title>
+
+    <!-- Decidi adicionar um style para ficar mais belooo :)-->
+    <style>
+      #product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 16px;
+      }
+
+      .product-card {
+        border: 1px solid #3b3b3b;
+        padding: 8px;
+        text-align: center;
+      }
+
+      .product-card img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+      }
+
+      button {
+        margin-top: 8px;
+        padding: 4px 8px;
+        cursor: pointer;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 0.9em;
+        color: #080808;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="product-grid"></div>
+    <footer id="footer"></footer>
+
+    <script>
+      // Criar um ficheiro html com uma tag script;
+      // Faz load dos dados da API: 'https://fakestoreapi.com/products'
+      const productGrid = document.getElementById("product-grid");
+      const footer = document.getElementById("footer");
+      const userId = 1;
+
+      fetch("https://fakestoreapi.com/products")
+        .then((res) => res.json())
+        .then((products) => {
+          console.log("Products loaded:", products);
+
+          // Criar dinamicamente uma grelha de produtos, utilizando o nome e imagem dos produtos carregados;
+          products.forEach((product) => {
+            const card = document.createElement("div");
+            card.className = "product-card";
+
+            const img = document.createElement("img");
+            img.src = product.image;
+            img.alt = product.title;
+
+            const name = document.createElement("p");
+            name.textContent = product.title;
+
+            const button = document.createElement("button");
+            button.textContent = "Add to Cart";
+            button.addEventListener("click", () => addToCart(product));
+
+            card.append(img, name, button);
+            productGrid.appendChild(card);
+          });
+        })
+        .catch((err) => console.error("Error loading products:", err));
+
+      // Adicionalmente, a cada produto deve ser gerado um botão com o texto “Add to cart”. Este botão deverá ter uma função ao ser clicado que adiciona um produto ao carrinho. Para isso usem o endpoint:
+      // Enviar para o endpoint https://fakestoreapi.com/carts/7 e o method deverá ser de update (PUT);
+      // Deverás enviar para o endpoint os seguintes campos:
+      // userId: um número;
+      // date: a data actual com o formato 2019-12-10;
+      //  products: um array de produtos, em que cada produto é um object composto por:
+      //  productId: um número;
+      // quantity: um número.
+
+      function addToCart(product) {
+        const today = new Date().toISOString().split("T")[0];
+
+        const payload = {
+          userId: 1,
+          date: today,
+          products: [{ productId: product.id, quantity: 1 }],
+        };
+
+        fetch("https://fakestoreapi.com/carts/7", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
+          .then((res) => res.json())
+          .then((data) => alert(`${product.title} added to cart!`))
+          .catch((err) => console.error("Error updating cart:", err));
+      }
+
+      // No footer da página deverá ser adicionado o texto “Copyright 2025”, sendo que 2026 deverá ser dinamicamente gerado
+      footer.textContent = `Copyright ${new Date().getFullYear()}`;
+    </script>
+  </body>
+</html>
+>
